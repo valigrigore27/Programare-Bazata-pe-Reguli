@@ -1,0 +1,45 @@
+este_cifra(X) :- member(X, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).
+
+toate_cifrele([]).
+toate_cifrele([V|Rest]) :- este_cifra(V), toate_cifrele(Rest).
+
+unice(Lista) :- list_to_ord_set(Lista, Set), length(Lista, L), length(Set, L).
+
+inceput_nenul([H|_]) :- H > 0.
+fara_inceput_nul([], [H|_]) :- H > 0.
+fara_inceput_nul([H|T], S) :- inceput_nenul(H), fara_inceput_nul(T, S).
+
+liste_cifre_in_numar([], K, K).
+liste_cifre_in_numar([H|T], K, Numar) :- length([H|T], N),
+                                         Np is K + H * 10**(N-1),
+                                         liste_cifre_in_numar(T, Np, Numar).
+
+liste_liste_cifre_in_lista_numere([], []).
+liste_liste_cifre_in_lista_numere([H|T], [J|K]) :- liste_cifre_in_numar(H, 0, J),
+                                                   liste_liste_cifre_in_lista_numere(T, K).
+
+suma_listei([], R, R).
+suma_listei([H|T], R, K) :- Rp is R + H, suma_listei(T, Rp, K).
+
+scrie_expresie([]) :- !.
+scrie_expresie([T]) :- write(T), !.
+scrie_expresie([H|T]) :- write(H), write(' + '), scrie_expresie(T), !.
+
+liste_liste_cifre_in_numere(Dlista) :- list_to_ord_set(Dlista, ListaNumere),
+                                        toate_cifrele(ListaNumere), unice(ListaNumere).
+
+rezolva_suma(Dlista, Suma) :- append(Dlista, Lista), append(Lista, Suma, Mix),
+                               liste_liste_cifre_in_numere(Mix),
+                               fara_inceput_nul(Dlista, Suma),
+                               liste_liste_cifre_in_lista_numere(Dlista, ListaNumere),
+                               liste_cifre_in_numar(Suma, 0, S),
+                               suma_listei(ListaNumere, 0, S).
+
+scrie_solutie(Dlista, Suma) :- liste_liste_cifre_in_lista_numere(Dlista, ListaNumere),
+                                liste_cifre_in_numar(Suma, 0, S),
+                                scrie_expresie(ListaNumere),
+                                write(' = '), write(S), nl.
+
+
+rezolva_si_scrie(ListaListe,Suma) :- rezolva_suma(ListaListe, Suma),
+                                      scrie_solutie(ListaListe, Suma).

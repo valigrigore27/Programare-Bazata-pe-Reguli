@@ -1,0 +1,73 @@
+Implementați în CLIPS si în PROLOG un program care citește (sau primește ca parametru)
+ o listă de litere și afișează doar vocalele distincte incluse în acea listă.
+
+ Exemplu: citește A B A C E afișează A E
+
+
+Implementare în CLIPS
+
+(defrule start
+   =>
+   (printout t "Introduceti literele separate prin spatiu: ")
+   (bind ?input (readline))
+   (bind ?letters (str-tokenize ?input " "))
+   (assert (letters ?letters)))
+
+(defrule extract-vowels
+   (letters ?letters)
+   =>
+   (bind ?vowels (create$))
+   (foreach ?letter ?letters
+      (if (member$ ?letter (create$ "A" "E" "I" "O" "U" "a" "e" "i" "o" "u"))
+         then
+            (if (not (member$ ?letter ?vowels))
+               then
+                  (bind ?vowels (insert$ ?vowels (length$ ?vowels) ?letter)))))
+   (printout t "Vocalele distincte sunt: " ?vowels crlf)
+   (retract (letters ?letters)))
+
+(reset)
+(run)
+Explicații CLIPS
+Regula start:
+
+Solicită utilizatorului să introducă o linie de text cu litere separate prin spațiu.
+Convertește linia de text într-o listă de litere și o stochează în fapte folosind assert.
+Regula extract-vowels:
+
+Extrage literele și verifică fiecare literă pentru a vedea dacă este o vocală.
+Folosește un vector (create$) pentru a colecta vocalele distincte.
+Afișează vocalele distincte.
+--------------------------------------------------------------------------------------------------
+Implementare în Prolog
+
+% Predicate to read input and print distinct vowels
+read_and_print_vowels :-
+    write('Introduceti literele separate prin spatiu: '),
+    read_line_to_string(user_input, Input),
+    split_string(Input, " ", "", Letters),
+    list_to_set(Letters, UniqueLetters),
+    find_vowels(UniqueLetters, Vowels),
+    format('Vocalele distincte sunt: ~w', [Vowels]).
+
+% Predicate to filter vowels
+find_vowels([], []).
+find_vowels([H|T], [H|Vowels]) :-
+    member(H, ["A", "E", "I", "O", "U", "a", "e", "i", "o", "u"]),
+    find_vowels(T, Vowels).
+find_vowels([_|T], Vowels) :-
+    find_vowels(T, Vowels).
+
+% Run the program
+:- read_and_print_vowels.
+Explicații Prolog
+Predicatul read_and_print_vowels/0:
+
+Solicită utilizatorului să introducă literele separate prin spațiu.
+Citește linia de text și o convertește într-o listă de litere.
+Utilizează list_to_set/2 pentru a obține literele unice.
+Filtrează vocalele distincte folosind find_vowels/2.
+Afișează vocalele distincte.
+Predicatul find_vowels/2:
+
+Filtrează vocalele din lista de litere unice.

@@ -1,0 +1,38 @@
+limba(armeana).
+limba(persana).
+limba(greaca).
+limba(aramaica).
+
+vorbeste(_, Y, Z) :- limba(Y), limba(Z).
+
+limbi(Salal, Atar, Eber, Zaman) :-
+    vorbeste(Salal, Salal_Limba_1, Salal_Limba_2),
+    Salal_Limba_1 \= persana, Salal_Limba_2 \= persana,
+    ((Salal_Limba_1 \= aramaica, Salal_Limba_1 \= armeana, Salal_Limba_2 \= aramaica, Salal_Limba_2 \= armeana);
+    (Salal_Limba_1 = aramaica, Salal_Limba_2 \= armeana);
+    (Salal_Limba_1 \= aramaica, Salal_Limba_2 = armeana)),
+    
+    vorbeste(Atar, Atar_Limba_1, Atar_Limba_2),
+    ((Atar_Limba_1 \= aramaica, Atar_Limba_1 \= armeana, Atar_Limba_2 \= aramaica, Atar_Limba_2 \= armeana);
+    (Atar_Limba_1 = aramaica, Atar_Limba_2 \= armeana);
+    (Atar_Limba_1 \= aramaica, Atar_Limba_2 = armeana)),
+    
+    vorbeste(Eber, Eber_Limba_1, Eber_Limba_2),
+    Eber_Limba_1 = aramaica, Eber_Limba_2 \= armeana,
+    
+    vorbeste(Zaman, Zaman_Limba_1, Zaman_Limba_2),
+    ((Zaman_Limba_1 \= aramaica, Zaman_Limba_1 \= armeana, Zaman_Limba_2 \= aramaica, Zaman_Limba_2 \= armeana);
+    (Zaman_Limba_1 = aramaica, Zaman_Limba_2 \= armeana);
+    (Zaman_Limba_1 \= aramaica, Zaman_Limba_2 = armeana)),
+    
+    ((Salal_Limba_1 == Atar_Limba_1; Salal_Limba_1 == Atar_Limba_2; Salal_Limba_2 == Atar_Limba_1; Salal_Limba_2 == Atar_Limba_2);
+    (Salal_Limba_1 == Eber_Limba_1; Salal_Limba_1 == Eber_Limba_2; Salal_Limba_2 == Eber_Limba_1; Salal_Limba_2 == Eber_Limba_2)),
+    
+    (Eber_Limba_2 == Zaman_Limba_1; Eber_Limba_2 == Zaman_Limba_2),
+    
+    Salal_Limba_1 \== Salal_Limba_2, Atar_Limba_1 \== Atar_Limba_2, Eber_Limba_1 \== Eber_Limba_2, Zaman_Limba_1 \== Zaman_Limba_2,
+    
+    format('~w cunoaste ~w si ~w.', ['Salal', Salal_Limba_1, Salal_Limba_2]),
+    format('~w cunoaste ~w si ~w.', ['Atar', Atar_Limba_1, Atar_Limba_2]),
+    format('~w cunoaste ~w si ~w.', ['Eber', Eber_Limba_1, Eber_Limba_2]),
+    format('~w cunoaste ~w si ~w.', ['Zaman', Zaman_Limba_1, Zaman_Limba_2]).
